@@ -1,0 +1,95 @@
+﻿
+<!DOCTYPE html>
+<html>
+<head>
+	
+<!--Import Google Icon Font-->
+      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	
+	<div class="navbar-fixed">
+    <nav>
+      <div class="nav-wrapper">
+		<a href="#!" class="brand-logo center">PIXNET Latest Food Info</a>  
+			<ul id="nav-mobile" class="left hide-on-med-and-down">
+				<li><a href="index.html">健康人生指南</a></li>
+				<li><a href="foodinfo.html">飲食資訊</a></li>
+				<li><a href="foodvid.html">自己的美食自己做</a></li>
+				<li><a href="map.html">美食藏寶圖</a></li>
+			</ul>
+      </div>
+    </nav>
+	</div><br>
+	
+	<script>
+	var xmlhttp = new XMLHttpRequest();
+	var url = "https://emma.pixnet.cc/mainpage/blog/categories/hot_weekly/26?page=1&per_page=10&api_version=2&format=json";
+
+
+	xmlhttp.onreadystatechange = function() {
+		if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+			var myArr = JSON.parse(xmlhttp.responseText);
+			myFunction(myArr);
+		}
+	}
+	xmlhttp.open("GET", url, true);
+	xmlhttp.send();
+
+
+		function myFunction(arr) {
+		var data = arr.articles;
+		var out = "";
+		var i;
+		for (i = 0; i < data.length; i++) {
+            out += '<li class="collection-item avatar">'
+			if ( data[i].thumb != "" ) out += '<img src="' + data[i].thumb + '" class="circle" width="100" length="100" />';
+			if ( data[i].title != "" ) out += '<span style=color:red;font-weight:bold class="title">' + data[i].title + '</span>';
+			if ( data[i].title != "" ) out += '<p><a href="' + data[i].link + '" target="_blank" class="secondary-content"><i class="material-icons">info_outline</i></a></p>';
+			out += '<p> </p>';
+			if ( data[i].tags.length != 0 )
+			   {
+				out += '<p>Tags: ';
+				for (j = 0; j < data[i].tags.length; j++) {
+					out += data[i].tags[j].tag + ', ';
+				}
+				out += '</p>';
+			   }
+			out += '<br /><br />';
+            out += '</li>'
+		}
+		document.getElementById("pixnet-stuff").innerHTML = out;
+	}
+	</script>
+</head>
+
+<body>
+	  <!--Import jQuery before materialize.js-->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script type="text/javascript" src="js/materialize.min.js"></script>
+    
+	<ul class="collection" id="pixnet-stuff">
+	</ul>
+	
+	<!--頁尾-->
+    <footer class="page-footer" style="buttom:10px">
+          <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">HTML5 Final Project</h5>
+              </div>
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <div class="container" >
+				© 2017 Copyright Text
+				<div class="white-text text-lighten-4 right">By:不想被當的學生</div>
+            </div>
+          </div>
+	</footer>
+	
+</body>
+</html>

@@ -1,0 +1,80 @@
+﻿<!DOCTYPE html>
+  <html>
+    <head>
+      <!--Import Google Icon Font-->
+      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+
+    <body>
+      <!--Import jQuery before materialize.js-->
+      <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script type="text/javascript" src="js/materialize.min.js"></script>
+
+	<div class="navbar-fixed">
+    <nav>
+      <div class="nav-wrapper">
+		<a href="#!" class="brand-logo center">Hell's Kitchen</a>  
+			<ul id="nav-mobile" class="left hide-on-med-and-down">
+				<li><a href="index.html">健康人生指南</a></li>
+				<li><a href="foodinfo.html">飲食資訊</a></li>
+				<li><a href="foodvid.html">自己的美食自己做</a></li>
+				<li><a href="map.html">美食藏寶圖</a></li>
+			</ul>
+      </div>
+    </nav>
+	</div><br>
+
+	<div id="VideoThumbs" class="video-container"><!-- 這裡會產生YouTube Thumbs列出影片 --></div>
+	
+	<script type="text/javascript">
+
+		var apiKey = "AIzaSyCIlwa-7d7qpKS0Nj5vhI7tb-0minC-qZ8";   //不知從何而來的API key
+
+		function getVideos(pid, apiKey) {
+			// PlaylistItems: list 語法參見 https://developers.google.com/youtube/v3/docs/playlistItems/list
+			$.get("https://www.googleapis.com/youtube/v3/playlistItems", {
+				part: "snippet,contentDetails",
+				maxResults: 50,
+				playlistId: pid,
+				key: apiKey},
+				function (data) {
+					document.getElementById("VideoThumbs").innerHTML += '<div></div>';
+					// 傳回值參見 https://developers.google.com/youtube/v3/docs/playlistItems#resource-representation
+					$.each(data.items, function (i, item) {
+						var str = '<div style="float:left;font-size:small;margin:5px;">';
+						str += '<a href="https://youtu.be/' + item.snippet.resourceId.videoId + '" target="_blank"><img src="' + item.snippet.thumbnails.medium.url + '" /><br />' + item.snippet.title + '</a><br />';
+						if (item.contentDetails.note !== undefined) str += '<a href="' + item.contentDetails.note + '" target="_blank">延伸閱讀</a><br />';
+						str += '</div>';
+						document.getElementById("VideoThumbs").innerHTML += str;
+					})
+				}
+			);
+		}
+		
+		getVideos("PLGP44wTtTnQWzXYPo6x_L18CFQFVQ94se", apiKey)		// Youtube 播放清單的序號
+	</script>	
+	
+	<!--頁尾-->
+    <footer class="page-footer" style="buttom:10px">
+          <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">HTML5 Final Project</h5>
+              </div>
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <div class="container" >
+				© 2017 Copyright Text
+				<div class="white-text text-lighten-4 right">By:不想被當的學生</div>
+            </div>
+          </div>
+	</footer>
+	
+</body>
+</html>

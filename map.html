@@ -1,0 +1,171 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+     <!--Import Google Icon Font-->
+      <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+      <!--Import materialize.css-->
+      <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+      <!--Let browser know website is optimized for mobile-->
+      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+       <!--Import jQuery before materialize.js-->
+	   <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+      <script type="text/javascript" src="js/materialize.min.js"></script>
+	
+	<div class="navbar-fixed">
+    <nav>
+      <div class="nav-wrapper">
+		<a href="#!" class="brand-logo center">Food Seeker</a>  
+			<ul id="nav-mobile" class="left hide-on-med-and-down">
+				<li><a href="index.html">健康人生指南</a></li>
+				<li><a href="foodinfo.html">飲食資訊</a></li>
+				<li><a href="foodvid.html">自己的美食自己做</a></li>
+				<li><a href="map.html">美食藏寶圖</a></li>
+			</ul>
+      </div>
+    </nav>
+	</div>
+		
+		<style>		 
+		  html, body {
+			height: 100%;
+		  }
+		  #map {
+			height: 100%;
+		  }
+
+		</style>
+
+    <script>
+		var Place=[
+			{'place':'三星園抹茶-宇治商船','lat':24.152432,'lng':120.663541},
+			{'place':'福芳號','lat':24.154541,'lng':120.661646},
+			{'place':'卡啡那(台中惠來店)','lat':24.155694,'lng':120.641222},
+			{'place':'小義大利(台中五權店)','lat':24.136439,'lng':120.662548},
+			{'place':'KFC(台中復興店)','lat':24.117368,'lng':120.658459},
+			{'place':'摩斯漢堡(興大店)','lat':24.121580,'lng':120.673294},
+			{'place':'逢甲夜市','lat':24.178660,'lng':120.645890},
+			{'place':'東海商圈','lat':24.181505,'lng':120.592611},
+			{'place':'忠孝夜市','lat':24.130535,'lng':120.684151},			
+		];
+		
+		var Center = {lat:24.120872, lng:120.674487};
+		var map;
+		var markers = [];
+		
+		function initMap() {
+		  MyMap = new google.maps.Map(document.getElementById('map'), {	//我把顯示的地圖取名為 Mymap
+			zoom: 13,
+			center: Center,
+		  });
+			addView(Center);
+		  
+		  var infoWindow = new google.maps.InfoWindow({map: MyMap});
+		  
+		  // Try HTML5 geolocation.
+		  if (navigator.geolocation) {
+			navigator.geolocation.getCurrentPosition(function(position) {
+			  pos = {
+				lat: position.coords.latitude,
+				lng: position.coords.longitude
+			  };
+			  infoWindow.setPosition(pos);
+			  infoWindow.setContent('you are here!');
+			  map.setCenter(pos);
+			}, function() {
+			  handleLocationError(true, infoWindow, map.getCenter());
+			});
+		  } else {
+			// Browser doesn't support Geolocation
+			handleLocationError(false, infoWindow, map.getCenter());
+		  }			
+		}
+		
+		function handleLocationError(browserHasGeolocation, infoWindow, pos) {
+		  infoWindow.setPosition(pos);
+		  infoWindow.setContent(browserHasGeolocation ?
+								'Error: The Geolocation service failed.' :
+								'Error: Your browser doesn\'t support geolocation.');
+		}
+
+		function add(x){
+		deleteMarkers();
+		Center.lat = Place[x].lat;
+		Center.lng = Place[x].lng;
+			addMarker(Center);
+		}
+		
+		// Adds a marker to the map and push to the array.
+		function addMarker(location) {
+		  var marker = new google.maps.Marker({
+			position: location,
+			map: MyMap,
+			title: '美食'
+		  });
+		   markers.push(marker);
+		  
+		}
+		// Sets the map on all markers in the array.
+		function setMapOnAll(map) {
+		  for (var i = 0; i < markers.length; i++) {
+			markers[i].setMap(map);
+		  }
+		}
+		// Removes the markers from the map, but keeps them in the array.
+		function clearMarkers() {
+		  setMapOnAll(null);
+		}
+
+		// Deletes all markers in the array by removing references to them.
+		function deleteMarkers() {
+		  clearMarkers();
+		  markers = [];
+		}
+		function listing(){
+		  for(i=0;i<3;i++){
+			var str = "";
+			<!-- str += "<a class='dropdown-button btn' href='#' data-activates='dropdown"+i+"'>Data"+i+"</a>" -->
+			<!-- str += "<ul id='dropdown"+i+"' class='dropdown-content'>" -->
+				for(j=0;j<3;j++)
+					str += '<li><a href="javascript:add('+(j+3*i)+')">'+Place[(j+3*i)].place+'</a></li>';
+			<!-- str += "</ul>" -->
+			document.getElementById("dropdown"+i).innerHTML = str;
+			}
+		}
+    </script>
+	 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHMCooQbCZ0IndAireAlJaSXy5Si8uoqc&signed_in=true&callback=initMap"></script>
+	  </head>
+  <body onload="listing()">
+  
+
+	<div style="position:absolute;bottom:10px;left:100px;border:solid 1px black;z-index:5;background-color:white;padding:5px;">
+			<a class='dropdown-button btn' href='#' data-activates='dropdown0'>甜甜蜜蜜</a>
+			<ul id='dropdown0' class='dropdown-content'>
+			</ul>
+			<a class='dropdown-button btn' href='#' data-activates='dropdown1'>異國風情</a>
+			<ul id='dropdown1' class='dropdown-content'>
+			</ul>
+			<a class='dropdown-button btn' href='#' data-activates='dropdown2'>美食集散地</a>
+			<ul id='dropdown2' class='dropdown-content'>
+			</ul>
+	</div>	
+
+   <div id="map"></div>
+ 
+	<!--頁尾-->
+    <footer class="page-footer" style="buttom:10px;z-index:5">
+          <div class="container">
+            <div class="row">
+              <div class="col l6 s12">
+                <h5 class="white-text">HTML5 Final Project</h5>
+              </div>
+            </div>
+          </div>
+          <div class="footer-copyright">
+            <div class="container" >
+				© 2017 Copyright Text
+				<div class="white-text text-lighten-4 right">By:不想被當的學生</div>
+            </div>
+          </div>
+    </footer>  
+  </body>
+</html>
